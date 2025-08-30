@@ -1,0 +1,53 @@
+[33mcommit 82ffdd94add30132a9264c8eb036cfc9466e00f3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31mupstream/main[m[33m, [m[1;31mupstream/HEAD[m[33m)[m
+Merge: 101c706 d36d1d7
+Author: mariusdique <96997933+mariusdique@users.noreply.github.com>
+Date:   Wed Aug 20 22:28:21 2025 +0200
+
+    Merge pull request #2 from mariusdique/revert-1-main
+    
+    Revert "Added MarketCaps"
+
+[33mcommit d36d1d7d17950d8acba7f44dcecf2ff16face25c[m[33m ([m[1;31mupstream/revert-1-main[m[33m)[m
+Author: mariusdique <96997933+mariusdique@users.noreply.github.com>
+Date:   Wed Aug 20 22:28:06 2025 +0200
+
+    Revert "Added MarketCaps"
+
+[33mcommit 101c706fadfb03ae76faf11f5b63a13906116b11[m
+Merge: 76489ef 99adca1
+Author: mariusdique <96997933+mariusdique@users.noreply.github.com>
+Date:   Wed Aug 20 22:26:09 2025 +0200
+
+    Merge pull request #1 from ShuaibuAlchemist/main
+    
+    Added MarketCaps
+
+[33mcommit 99adca1b2f191ef065410ff76e4328c2ea736e1a[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: ShuaibuAlamin <shuaibualamin@gmail.com>
+Date:   Tue Aug 19 21:11:22 2025 +0100
+
+    Add new files
+
+[33mcommit 76489eff6415cff3257342f30566fcc3c4e7241e[m
+Author: mariusdique <mario.arabaolaza@gmail.com>
+Date:   Mon Aug 18 16:25:11 2025 +0200
+
+    Adding Inflation graphic
+
+[33mcommit b4367cd692b8716068eab929f266aac08f14e8dc[m
+Author: mariusdique <mario.arabaolaza@gmail.com>
+Date:   Mon Aug 18 15:15:16 2025 +0200
+
+    Federal Funds Rate Graphic
+
+[33mcommit bdca7a4e5a666faed4e757a45ed8e0b3faf2c30d[m
+Author: mariusdique <mario.arabaolaza@gmail.com>
+Date:   Sun Aug 17 20:09:51 2025 +0200
+
+    Initial project setup with environment
+
+[33mcommit bcac7ff0640dc2877060792a90f4746e413d231a[m
+Author: mariusdique <96997933+mariusdique@users.noreply.github.com>
+Date:   Sun Aug 17 18:34:23 2025 +0200
+
+    Initial commit
