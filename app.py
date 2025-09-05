@@ -17,6 +17,15 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+st.markdown(
+        """
+        <div style="background-color: #FF4AF3; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+            <h3 style="color: #00FF00; text-align: center; margin: 0;">About Crypto Macro Risk Dashboard</h3>
+        </div>
+        """,
+        unsafe_allow_html=True
+)
+
 
 st.title("📊 Crypto Macro Risk Dashboard")
 
@@ -150,7 +159,7 @@ def download_plot_button(fig, filename):
 # --------------------
 # Streamlit Tabs
 # --------------------
-tab1, tab2 = st.tabs(["📂 Metrics Explorer", "🌡 Risk Thermometer"])
+tab1, tab2, tab3, tab4 = st.tabs(["📂 Metrics Explorer", "🌡 Risk Thermometer","🔗Correlation Explorer", "💹 Multi-Coin Overlay"])
 
 # --------------------
 # Tab 1: Metrics Explorer
@@ -250,3 +259,131 @@ with tab2:
     st.markdown("### 📥 Download Data & Plot")
     download_csv_button(merged_df, f"thermometer_{coin_choice}.csv")
     download_plot_button(fig, f"thermometer_{coin_choice}.png")
+
+# --------------------
+# Tab 3: Correlation Explorer
+# --------------------
+with tab3:
+    st.sidebar.title("ℹ️ About (Correlation Explorer)")
+    st.sidebar.info(
+        """
+        Explore correlations between macro & crypto variables.
+
+        Features:
+        - Pick **any two series** from datasets or live prices  
+        - Compute **Pearson correlation**  
+        - Rolling correlation (default: 12 months)  
+        """
+    )
+
+    # User selects metrics
+    metric_options = list(datasets.keys()) + ["Bitcoin Price", "Ethereum Price", "Solana Price"]
+    col1, col2 = st.columns(2)
+    with col1:
+        metric_x = st.selectbox("Select First Metric", metric_options, index=0)
+    with col2:
+        metric_y = st.selectbox("Select Second Metric", metric_options, index=1)
+
+    # Load chosen series
+    def load_series(metric):
+        if metric in datasets:
+            df = datasets[metric]
+            numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+            col = numeric_cols[0]
+            return df[[col]].rename(columns={col: metric})
+        else:
+            coin_id = metric.split()[0].lower()  # e.g. "Bitcoin Price" -> "bitcoin"
+            df = fetch_coin_price(coin_id)
+            return df[["price"]].rename(columns={"price": metric})
+
+    series_x = load_series(metric_x)
+    series_y = load_series(metric_y)
+
+    # Merge
+    merged = series_x.join(series_y, how="inner")
+
+    if merged.empty:
+        st.warning("⚠️ Not enough data to compute correlation.")
+    else:
+        # Correlation coefficient
+        corr_value = merged[metric_x].corr(merged[metric_y])
+        st.metric(label="📈 Pearson Correlation", value=f"{corr_value:.2f}")
+
+        # Rolling correlation
+        window = st.slider("Rolling Window (months)", 3, 24, 12)
+        rolling_corr = merged[metric_x].rolling(window).corr(merged[metric_y])
+
+        # ---- Plot ----
+        fig, ax = plt.subplots(figsize=(12, 6))
+
+        ax.plot(merged.index, merged[metric_x], label=metric_x, color="blue")
+        ax.plot(merged.index, merged[metric_y], label=metric_y, color="orange")
+
+        ax.set_ylabel("Metric Values")
+        ax.set_title(f"{metric_x} vs {metric_y}")
+        ax.legend(loc="upper left")
+        st.pyplot(fig)
+
+        # Rolling correlation plot
+        fig2, ax2 = plt.subplots(figsize=(12, 4))
+        ax2.plot(rolling_corr.index, rolling_corr, color="green", label="Rolling Correlation")
+        ax2.axhline(0, color="black", linestyle="--", linewidth=1)
+        ax2.set_title(f"{window}-Month Rolling Correlation")
+        ax2.set_ylabel("Correlation")
+        ax2.legend()
+        st.pyplot(fig2)
+
+        # ---- Downloads ----
+        st.markdown("### 📥 Download Data & Plots")
+        download_csv_button(merged, f"correlation_{metric_x}_{metric_y}.csv")
+        download_plot_button(fig, f"series_{metric_x}_{metric_y}.png")
+        download_plot_button(fig2, f"rolling_corr_{metric_x}_{metric_y}.png")
+
+# --------------------
+# Tab 4: Multi-Coin Overlay
+# --------------------
+#tab4 = st.tabs(["📊 Multi-Coin Overlay"])[0]
+
+with tab4:
+    st.sidebar.title("ℹ️ About (Multi-Coin Overlay)")
+    st.sidebar.info(
+        """
+        Compare the relative performance of multiple coins over time.  
+        - Select coins (BTC, ETH, SOL, etc.)  
+        - Prices are normalized (start = 100) for fair comparison  
+        - Useful to see relative outperformance  
+        """
+    )
+
+    # Coin options
+    coin_choices = ["bitcoin", "ethereum", "solana", "ripple", "litecoin", "cardano", "polkadot", "dogecoin", "avalanche", "chainlink"]
+    selected_coins = st.multiselect("Select Coins to Compare", coin_choices, default=["bitcoin", "ethereum"])
+
+    price_data = {}
+
+    for coin in selected_coins:
+        df = fetch_coin_price(coin)
+        if not df.empty:
+            # Normalize to start = 100
+            df["normalized"] = df["price"] / df["price"].iloc[0] * 100
+            price_data[coin.title()] = df["normalized"]
+
+    if price_data:
+        combined_df = pd.DataFrame(price_data)
+
+        # ---- Plot ----
+        fig, ax = plt.subplots(figsize=(12, 6))
+        for col in combined_df.columns:
+            ax.plot(combined_df.index, combined_df[col], label=col, linewidth=2)
+
+        ax.set_title("Multi-Coin Performance (Normalized to 100)")
+        ax.set_ylabel("Normalized Performance (Start=100)")
+        ax.legend()
+        st.pyplot(fig)
+
+        # ---- Downloads ----
+        st.markdown("### 📥 Download Data & Plot")
+        download_csv_button(combined_df, "multi_coin_overlay.csv")
+        download_plot_button(fig, "multi_coin_overlay.png")
+    else:
+        st.warning("⚠️ No coin data available. Try selecting different coins.")
