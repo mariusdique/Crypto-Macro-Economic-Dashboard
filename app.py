@@ -8,7 +8,7 @@ import os
 import io
 from pathlib import Path
 from dotenv import load_dotenv
-from streamlit_js_eval import streamlit_js_eval
+from streamlit.components.v1 import html as components_html
 
 # --------------------
 # Config
@@ -38,6 +38,41 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+st.markdown("""
+    <style>
+    /* Body background */
+    .stApp {
+        background: linear-gradient(120deg, #f0f4f8, #d9e2ec);
+        color: #003366;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* Headings */
+    h1, h2, h3, h4 {
+        color: #1a202c;
+    }
+
+    /* Sidebar styling */
+    .css-1d391kg {
+        background-color: #e6fffa !important;
+    }
+
+    /* Code blocks */
+    pre, code {
+        background-color: #f4f4f4;
+        padding: 5px;
+        border-radius: 5px;
+   }
+
+    /* Buttons */
+    button {
+        background-color: #2b6cb0 !important;
+        color: white !important;
+        border-radius: 8px;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 
 # About Section (Expandable)
@@ -198,81 +233,71 @@ tab1, tab2, tab3, tab4 = st.tabs(["📂 Metrics Explorer", "🌡 Risk Thermomete
 # Tab 1: Metrics Explorer
 # --------------------
 with tab1:
+# --------------------
+# Tab 1: Metrics Explorer (replace your current About + scroll code in tab1)
+# --------------------
     st.markdown("<div id='metrics_about'></div>", unsafe_allow_html=True)
+
     st.markdown(
-        """
-        <div style="background-color:#f0f8ff;padding:10px;border-radius:8px">
-            <h2 style="color:#1E90FF;">📂 Metrics Explorer</h2>
-        </div>
-        """,
-        unsafe_allow_html=True
+    """
+    <div style="background-color:#f0f8ff;padding:10px;border-radius:8px">
+        <h2 style="color:#1E90FF;">📂 Metrics Explorer</h2>
+    </div>
+    """,
+    unsafe_allow_html=True
     )
 
     st.sidebar.title("ℹ️ About (Metrics Explorer)")
     st.sidebar.info(
-        """
-        Explore macro & crypto metrics:
-        - CPI  
-        - Interest Rates  
-        - S&P 500  
-        - BTC Dominance  
-        - Market Caps  
-        - Hashrate  
+    """
+    Explore macro & crypto metrics:
+    - CPI
+    - Interest Rates
+    - S&P 500
+    - BTC Dominance
+    - Market Caps
+    - Hashrate
 
-        Data is loaded from saved CSVs.
-        """
+    Data is loaded from saved CSVs.
+    """
     )
 
-    # Auto-scroll here
-    streamlit_js_eval(
-        js_expressions=[
-            """
-            (() => {
-                setTimeout(() => {
-                    const el = document.getElementById("metrics_about");
-                    if (el) {
-                        el.scrollIntoView({behavior: "smooth", block: "center"});
-                    }
-                }, 300);
-                return true;
-            })()
-            """
-        ],
-        key="metrics_scroll"
-    )
+    # Auto-scroll via small iframe (retries until anchor found)
+    scroll_js = """
+    <script>
+    (function(){
+    function tryScroll(){
+    try {
+      var el = parent.document.getElementById("metrics_about");
+      if(el){ el.scrollIntoView({behavior:"smooth", block:"center"}); return true; }
+    } catch(e){ /* ignore */ }
+    return false;
+    }
+    var tries = 0;
+    var interval = setInterval(function(){
+    tries++;
+    if(tryScroll() || tries>25){ clearInterval(interval); }
+    }, 200);
+    })();
+    </script>
+    """
+    components_html(scroll_js, height=10)
 
-
-    selected_metric = st.selectbox("Select a Metric", list(datasets.keys()))
-    df = datasets[selected_metric]
-
-    view_option = st.radio("View Mode:", ["Table", "Plot"], horizontal=True)
-
-    if view_option == "Table":
-        st.write(f"📄 Latest {selected_metric} data")
-        st.dataframe(df.tail(10), use_container_width=True)
-
-    elif view_option == "Plot":
-        numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
-        col_to_plot = numeric_cols[0] if len(numeric_cols) == 1 else st.selectbox("Select column", numeric_cols)
-
-        fig, ax = plt.subplots(figsize=(10, 5))
-        ax.plot(df.index, df[col_to_plot], label=selected_metric, linewidth=2)
-        ax.set_title(f"{selected_metric} Over Time")
-        ax.set_xlabel("Date")
-        ax.set_ylabel(col_to_plot)
-        ax.legend()
-        st.pyplot(fig)
 
 
 # --------------------
 # Tab 2: Risk Thermometer
 # --------------------
 with tab2:
+        # --------------------
+    # Tab 2: Risk Thermometer (replace your current About + scroll code in tab2)
+    # --------------------
     st.markdown("<div id='thermo_about'></div>", unsafe_allow_html=True)
+
     st.markdown(
         """
-        <div style="background-color:#FFF5F5;padding:10px;border-radius:8px">
-            <h2 style="color:#E53E3E;">🌡 Risk Thermometer</h2>
+        <div style="background-color:#FFF3E6;padding:10px;border-radius:8px">
+            <h2 style="color:#994C00;">🌡 Risk Thermometer</h2>
         </div>
         """,
         unsafe_allow_html=True
@@ -293,23 +318,27 @@ with tab2:
         """
     )
 
-    # Auto-scroll here
-    streamlit_js_eval(
-        js_expressions=[
-            """
-            (() => {
-                setTimeout(() => {
-                    const el = document.getElementById("thermo_about");
-                    if (el) {
-                        el.scrollIntoView({behavior: "smooth", block: "center"});
-                    }
-                }, 300);
-                return true;
-            })()
-            """
-        ],
-        key="thermo_scroll"
-    )
+    scroll_js = """
+    <script>
+    (function(){
+    function tryScroll(){
+        try {
+        var el = parent.document.getElementById("thermo_about");
+        if(el){ el.scrollIntoView({behavior:"smooth", block:"center"}); return true; }
+        } catch(e){}
+        return false;
+    }
+    var tries = 0;
+    var interval = setInterval(function(){
+        tries++;
+        if(tryScroll() || tries>25){ clearInterval(interval); }
+    }, 200);
+    })();
+    </script>
+    """
+    components_html(scroll_js, height=10)
+
+
 
     # Compute thermometer
     thermometer = compute_thermometer(datasets)
@@ -355,11 +384,15 @@ with tab2:
 # Tab 3: Correlation Explorer
 # --------------------
 with tab3:
+        # --------------------
+    # Tab 3: Correlation Explorer (replace your current About + scroll code in tab3)
+    # --------------------
     st.markdown("<div id='corr_about'></div>", unsafe_allow_html=True)
+
     st.markdown(
         """
-        <div style="background-color:#FAF5FF;padding:10px;border-radius:8px">
-            <h2 style="color:#6B46C1;">🔗 Correlation Explorer</h2>
+        <div style="background-color:#F9F0FF;padding:10px;border-radius:8px">
+            <h2 style="color:#4B0082;">🔗 Correlation Explorer</h2>
         </div>
         """,
         unsafe_allow_html=True
@@ -371,29 +404,33 @@ with tab3:
         Explore correlations between macro & crypto variables.
 
         Features:
-        - Pick **any two series** from datasets or live prices  
-        - Compute **Pearson correlation**  
+        - Pick any two series from datasets or live prices  
+        - Compute Pearson correlation  
         - Rolling correlation (default: 12 months)  
         """
     )
 
-    # Auto-scroll here
-    streamlit_js_eval(
-        js_expressions=[
-            """
-            (() => {
-                setTimeout(() => {
-                    const el = document.getElementById("corr_about");
-                    if (el) {
-                        el.scrollIntoView({behavior: "smooth", block: "center"});
-                    }
-                }, 300);
-                return true;
-            })()
-            """
-        ],
-        key="corr_scroll"
-    )
+    scroll_js = """
+    <script>
+    (function(){
+    function tryScroll(){
+        try {
+        var el = parent.document.getElementById("corr_about");
+        if(el){ el.scrollIntoView({behavior:"smooth", block:"center"}); return true; }
+        } catch(e){}
+        return false;
+    }
+    var tries = 0;
+    var interval = setInterval(function(){
+        tries++;
+        if(tryScroll() || tries>25){ clearInterval(interval); }
+    }, 200);
+    })();
+    </script>
+    """
+    components_html(scroll_js, height=10)
+
+
 
 
     # User selects metrics
@@ -465,11 +502,15 @@ with tab3:
 #tab4 = st.tabs(["📊 Multi-Coin Overlay"])[0]
 
 with tab4:
+        # --------------------
+    # Tab 4: Multi-Coin Overlay (replace your current About + scroll code in tab4)
+    # --------------------
     st.markdown("<div id='multi_about'></div>", unsafe_allow_html=True)
+
     st.markdown(
         """
-        <div style="background-color:#E6FFFA;padding:10px;border-radius:8px">
-            <h2 style="color:#00665C;">📊 Multi-Coin Overlay</h2>
+        <div style='background-color:#E6FFFA; padding:10px; border-radius:8px;'>
+            <h2 style='color:#00665C;'>📊 Multi-Coin Overlay</h2>
         </div>
         """,
         unsafe_allow_html=True
@@ -485,23 +526,27 @@ with tab4:
         """
     )
 
-    # Auto-scroll here
-    streamlit_js_eval(
-        js_expressions=[
-            """
-            (() => {
-                setTimeout(() => {
-                    const el = document.getElementById("multi_about");
-                    if (el) {
-                        el.scrollIntoView({behavior: "smooth", block: "center"});
-                    }
-                }, 300);
-                return true;
-            })()
-            """
-        ],
-        key="multi_scroll"
-    )
+    scroll_js = """
+    <script>
+    (function(){
+    function tryScroll(){
+        try {
+        var el = parent.document.getElementById("multi_about");
+        if(el){ el.scrollIntoView({behavior:"smooth", block:"center"}); return true; }
+        } catch(e){}
+        return false;
+    }
+    var tries = 0;
+    var interval = setInterval(function(){
+        tries++;
+        if(tryScroll() || tries>25){ clearInterval(interval); }
+    }, 200);
+    })();
+    </script>
+    """
+    components_html(scroll_js, height=10)
+
+
     
     # Coin options
     coin_choices = ["bitcoin", "ethereum", "solana", "ripple", "litecoin", "cardano", "polkadot", "dogecoin", "avalanche", "chainlink"]
@@ -535,3 +580,4 @@ with tab4:
         download_plot_button(fig, "multi_coin_overlay.png")
     else:
         st.warning("⚠️ No coin data available. Try selecting different coins.")
+
