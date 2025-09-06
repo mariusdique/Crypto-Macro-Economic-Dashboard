@@ -8,6 +8,7 @@ import os
 import io
 from pathlib import Path
 from dotenv import load_dotenv
+from streamlit_js_eval import streamlit_js_eval
 
 # --------------------
 # Config
@@ -17,17 +18,49 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+
+#st.title("📊 Crypto Macro Risk Dashboard")
+# --------------------
+# Title & About Section
+# --------------------
+
+# --------------------
+# Title with Background
+# --------------------
 st.markdown(
-        """
-        <div style="background-color: #FF4AF3; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
-            <h3 style="color: #00FF00; text-align: center; margin: 0;">About Crypto Macro Risk Dashboard</h3>
-        </div>
-        """,
-        unsafe_allow_html=True
+    """
+    <div style="background-color:#1E90FF;padding:15px;border-radius:10px">
+        <h1 style="color:white;text-align:center;">
+            📊 Crypto Macro Risk Dashboard
+        </h1>
+    </div>
+    """,
+    unsafe_allow_html=True
 )
 
 
-st.title("📊 Crypto Macro Risk Dashboard")
+# About Section (Expandable)
+with st.expander("ℹ️ About this Dashboard"):
+    st.markdown(
+        """
+        Welcome to the **Crypto Macro Risk Dashboard** 🎯  
+
+        This dashboard integrates **macro-economic indicators**  
+        (CPI, Interest Rates, S&P 500) with **crypto-native metrics**  
+        (BTC Market Cap, Total Market Cap, BTC Dominance, Hashrate)  
+        to build a **Crypto Risk Thermometer**.  
+
+        🔹 **Features:**  
+        - Explore macro & crypto datasets  
+        - Track market risk sentiment with the Thermometer  
+        - Compare multiple coins (BTC, ETH, SOL, …)  
+        - Correlation explorer between variables  
+        
+        ✅ Built with Streamlit, Python, and CoinGecko API  
+        """
+    )
+
 
 # Load environment variables (for API key)
 load_dotenv()
@@ -165,6 +198,16 @@ tab1, tab2, tab3, tab4 = st.tabs(["📂 Metrics Explorer", "🌡 Risk Thermomete
 # Tab 1: Metrics Explorer
 # --------------------
 with tab1:
+    st.markdown("<div id='metrics_about'></div>", unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div style="background-color:#f0f8ff;padding:10px;border-radius:8px">
+            <h2 style="color:#1E90FF;">📂 Metrics Explorer</h2>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
     st.sidebar.title("ℹ️ About (Metrics Explorer)")
     st.sidebar.info(
         """
@@ -179,6 +222,25 @@ with tab1:
         Data is loaded from saved CSVs.
         """
     )
+
+    # Auto-scroll here
+    streamlit_js_eval(
+        js_expressions=[
+            """
+            (() => {
+                setTimeout(() => {
+                    const el = document.getElementById("metrics_about");
+                    if (el) {
+                        el.scrollIntoView({behavior: "smooth", block: "center"});
+                    }
+                }, 300);
+                return true;
+            })()
+            """
+        ],
+        key="metrics_scroll"
+    )
+
 
     selected_metric = st.selectbox("Select a Metric", list(datasets.keys()))
     df = datasets[selected_metric]
@@ -206,6 +268,16 @@ with tab1:
 # Tab 2: Risk Thermometer
 # --------------------
 with tab2:
+    st.markdown("<div id='thermo_about'></div>", unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div style="background-color:#FFF5F5;padding:10px;border-radius:8px">
+            <h2 style="color:#E53E3E;">🌡 Risk Thermometer</h2>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
     st.sidebar.title("ℹ️ About (Risk Thermometer)")
     st.sidebar.info(
         """
@@ -221,6 +293,25 @@ with tab2:
         """
     )
 
+    # Auto-scroll here
+    streamlit_js_eval(
+        js_expressions=[
+            """
+            (() => {
+                setTimeout(() => {
+                    const el = document.getElementById("thermo_about");
+                    if (el) {
+                        el.scrollIntoView({behavior: "smooth", block: "center"});
+                    }
+                }, 300);
+                return true;
+            })()
+            """
+        ],
+        key="thermo_scroll"
+    )
+
+    # Compute thermometer
     thermometer = compute_thermometer(datasets)
 
     coin_choice = st.selectbox("Overlay with Coin Price", ["bitcoin", "ethereum", "solana"])
@@ -264,6 +355,16 @@ with tab2:
 # Tab 3: Correlation Explorer
 # --------------------
 with tab3:
+    st.markdown("<div id='corr_about'></div>", unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div style="background-color:#FAF5FF;padding:10px;border-radius:8px">
+            <h2 style="color:#6B46C1;">🔗 Correlation Explorer</h2>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
     st.sidebar.title("ℹ️ About (Correlation Explorer)")
     st.sidebar.info(
         """
@@ -275,6 +376,25 @@ with tab3:
         - Rolling correlation (default: 12 months)  
         """
     )
+
+    # Auto-scroll here
+    streamlit_js_eval(
+        js_expressions=[
+            """
+            (() => {
+                setTimeout(() => {
+                    const el = document.getElementById("corr_about");
+                    if (el) {
+                        el.scrollIntoView({behavior: "smooth", block: "center"});
+                    }
+                }, 300);
+                return true;
+            })()
+            """
+        ],
+        key="corr_scroll"
+    )
+
 
     # User selects metrics
     metric_options = list(datasets.keys()) + ["Bitcoin Price", "Ethereum Price", "Solana Price"]
@@ -345,6 +465,16 @@ with tab3:
 #tab4 = st.tabs(["📊 Multi-Coin Overlay"])[0]
 
 with tab4:
+    st.markdown("<div id='multi_about'></div>", unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div style="background-color:#E6FFFA;padding:10px;border-radius:8px">
+            <h2 style="color:#00665C;">📊 Multi-Coin Overlay</h2>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
     st.sidebar.title("ℹ️ About (Multi-Coin Overlay)")
     st.sidebar.info(
         """
@@ -355,6 +485,24 @@ with tab4:
         """
     )
 
+    # Auto-scroll here
+    streamlit_js_eval(
+        js_expressions=[
+            """
+            (() => {
+                setTimeout(() => {
+                    const el = document.getElementById("multi_about");
+                    if (el) {
+                        el.scrollIntoView({behavior: "smooth", block: "center"});
+                    }
+                }, 300);
+                return true;
+            })()
+            """
+        ],
+        key="multi_scroll"
+    )
+    
     # Coin options
     coin_choices = ["bitcoin", "ethereum", "solana", "ripple", "litecoin", "cardano", "polkadot", "dogecoin", "avalanche", "chainlink"]
     selected_coins = st.multiselect("Select Coins to Compare", coin_choices, default=["bitcoin", "ethereum"])
