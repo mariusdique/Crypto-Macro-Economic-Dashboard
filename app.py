@@ -21,55 +21,289 @@ st.set_page_config(
 
 
 #st.title("📊 Crypto Macro Risk Dashboard")
-# --------------------
-# Title & About Section
-# --------------------
 
 # --------------------
 # Title with Background
 # --------------------
 st.markdown(
     """
-    <div style="background-color:#1E90FF;padding:15px;border-radius:10px">
-        <h1 style="color:white;text-align:center;">
+    <div style="
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    ">
+        <h1 style="
+            color: white;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin: 0;
+        ">
             📊 Crypto Macro Risk Dashboard
         </h1>
+        <p style="
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            font-size: 1.1rem;
+            margin: 10px 0 0 0;
+        ">
+            Advanced Analytics for Crypto Market Intelligence
+        </p>
     </div>
     """,
     unsafe_allow_html=True
 )
 
+# Enhanced CSS styling
 st.markdown("""
     <style>
-    /* Body background */
+    /* Import modern font */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    /* Main app background with animated gradient */
     .stApp {
-        background: linear-gradient(120deg, #f0f4f8, #d9e2ec);
-        color: #003366;
-        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        font-family: 'Inter', sans-serif;
     }
-
-    /* Headings */
-    h1, h2, h3, h4 {
-        color: #1a202c;
+    
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
-
-    /* Sidebar styling */
-    .css-1d391kg {
-        background-color: #e6fffa !important;
+    
+    /* Main content area with glassmorphism */
+    .main .block-container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        margin-top: 1rem;
     }
-
+    
+    /* Headings with modern styling */
+    h1, h2, h3, h4, h5, h6 {
+        color: #2d3748;
+        font-weight: 600;
+        text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+    }
+    
+    /* Sidebar with dark theme */
+    .css-1d391kg, .css-1lcbmhc {
+        background: rgba(30, 30, 30, 0.9) !important;
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .css-1d391kg .sidebar-content {
+        color: white;
+    }
+    
+    /* Tab styling */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 8px;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        height: 50px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: #2d3748;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    /* Metric cards with modern design */
+    [data-testid="metric-container"] {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 1rem;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+    
+    [data-testid="metric-container"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Buttons with gradient styling */
+    .stButton > button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    /* Download buttons */
+    .stDownloadButton > button {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    /* Selectbox styling */
+    .stSelectbox > div > div {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+    }
+    
+    /* Multiselect styling */
+    .stMultiSelect > div > div {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+    }
+    
+    /* Slider styling */
+    .stSlider > div > div > div > div {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    /* Expander styling */
+    .streamlit-expanderHeader {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        color: #2d3748;
+        font-weight: 500;
+    }
+    
+    .streamlit-expanderContent {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 0 0 12px 12px;
+        backdrop-filter: blur(5px);
+    }
+    
+    /* Warning and info boxes */
+    .stAlert > div {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
     /* Code blocks */
-    pre, code {
-        background-color: #f4f4f4;
-        padding: 5px;
-        border-radius: 5px;
-   }
-
-    /* Buttons */
-    button {
-        background-color: #2b6cb0 !important;
-        color: white !important;
-        border-radius: 8px;
+    .stCodeBlock {
+        background: rgba(30, 30, 30, 0.8);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Success messages */
+    .stSuccess > div {
+        background: rgba(72, 187, 120, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(72, 187, 120, 0.3);
+        border-radius: 12px;
+    }
+    
+    /* Error messages */
+    .stError > div {
+        background: rgba(245, 101, 101, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(245, 101, 101, 0.3);
+        border-radius: 12px;
+    }
+    
+    /* Warning messages */
+    .stWarning > div {
+        background: rgba(237, 137, 54, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(237, 137, 54, 0.3);
+        border-radius: 12px;
+    }
+    
+    /* Info messages */
+    .stInfo > div {
+        background: rgba(66, 153, 225, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(66, 153, 225, 0.3);
+        border-radius: 12px;
+    }
+    
+    /* Dataframe styling */
+    .dataframe {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Loading spinner */
+    .stSpinner > div {
+        border-top-color: #667eea;
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    }
+    
+    /* Responsive design for mobile */
+    @media (max-width: 768px) {
+        .main .block-container {
+            padding: 1rem;
+        }
+        
+        h1 {
+            font-size: 2rem !important;
+        }
     }
     </style>
 """, unsafe_allow_html=True)
@@ -81,8 +315,7 @@ with st.expander("ℹ️ About this Dashboard"):
         """
         Welcome to the **Crypto Macro Risk Dashboard** 🎯  
 
-        This dashboard integrates **macro-economic indicators**  
-        (CPI, Interest Rates, S&P 500) with **crypto-native metrics**  
+        This dashboard integrates **macro-economic indicators**  (CPI, Interest Rates, S&P 500) with **crypto-native metrics**  
         (BTC Market Cap, Total Market Cap, BTC Dominance, Hashrate)  
         to build a **Crypto Risk Thermometer**.  
 
@@ -92,7 +325,7 @@ with st.expander("ℹ️ About this Dashboard"):
         - Compare multiple coins (BTC, ETH, SOL, …)  
         - Correlation explorer between variables  
         
-        ✅ Built with Streamlit, Python, and CoinGecko API  
+        ✅ Built with Streamlit, Python, and CoinGecko API 
         """
     )
 
@@ -104,7 +337,7 @@ API_KEY = os.getenv("GECKO_KEY")
 # --------------------
 # Data Loader
 # --------------------
-data_dir = Path(r"D:\My folder\Crypto-Macro-Economic-Dashboard\dashboard")
+data_dir = Path(__file__).parent / "dashboard"
 
 files = {
     "CPI": "cpi_data.csv",
@@ -246,8 +479,23 @@ with tab1:
     """,
     unsafe_allow_html=True
     )
+    
 
-    st.sidebar.title("ℹ️ About (Metrics Explorer)")
+    st.sidebar.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        ">
+            <h3 style="color: white; margin: 0 0 10px 0; text-align: center;">ℹ️ About (Metrics Explorer)</h3>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    # KEEP THIS EXISTING CODE
+    
     st.sidebar.info(
     """
     Explore macro & crypto metrics:
@@ -261,6 +509,7 @@ with tab1:
     Data is loaded from saved CSVs.
     """
     )
+
 
     # Auto-scroll via small iframe (retries until anchor found)
     scroll_js = """
@@ -284,6 +533,27 @@ with tab1:
     components_html(scroll_js, height=10)
 
 
+    selected_metric = st.selectbox("Select a Metric", list(datasets.keys()))
+    df = datasets[selected_metric]
+
+    view_option = st.radio("View Mode:", ["Table", "Plot"], horizontal=True)
+
+    if view_option == "Table":
+        st.write(f"📄 Latest {selected_metric} data")
+        st.dataframe(df.tail(10), use_container_width=True)
+
+    elif view_option == "Plot":
+        numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+        col_to_plot = numeric_cols[0] if len(numeric_cols) == 1 else st.selectbox("Select column", numeric_cols)
+
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(df.index, df[col_to_plot], label=selected_metric, linewidth=2)
+        ax.set_title(f"{selected_metric} Over Time")
+        ax.set_xlabel("Date")
+        ax.set_ylabel(col_to_plot)
+        ax.legend()
+        st.pyplot(fig)
+
 
 # --------------------
 # Tab 2: Risk Thermometer
@@ -303,7 +573,21 @@ with tab2:
         unsafe_allow_html=True
     )
 
-    st.sidebar.title("ℹ️ About (Risk Thermometer)")
+    # SIDEBAR DESIGN AND COLOURS
+    st.sidebar.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        ">
+            <h3 style="color: #8b1538; margin: 0 0 10px 0; text-align: center;">ℹ️ About (Risk Thermometer)</h3>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # SIDEBAR CONTENT
     st.sidebar.info(
         """
         The **Crypto Risk Thermometer** (0–100) combines:
@@ -398,7 +682,21 @@ with tab3:
         unsafe_allow_html=True
     )
 
-    st.sidebar.title("ℹ️ About (Correlation Explorer)")
+    #SIDEBAR DESIGN AND COLOURS
+    st.sidebar.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(168, 237, 234, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        ">
+            <h3 style="color: #2d3748; margin: 0 0 10px 0; text-align: center;">ℹ️ About (Correlation Explorer)</h3>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # SIDEBAR CONTENT
     st.sidebar.info(
         """
         Explore correlations between macro & crypto variables.
@@ -499,7 +797,7 @@ with tab3:
 # --------------------
 # Tab 4: Multi-Coin Overlay
 # --------------------
-#tab4 = st.tabs(["📊 Multi-Coin Overlay"])[0]
+#tab4 = st.tabs(["📊 Multi-Coin Overlay"])
 
 with tab4:
         # --------------------
@@ -516,7 +814,21 @@ with tab4:
         unsafe_allow_html=True
     )
 
-    st.sidebar.title("ℹ️ About (Multi-Coin Overlay)")
+    #SIDEBAR DESIGN AND COLOURS
+    st.sidebar.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        ">
+            <h3 style="color: white; margin: 0 0 10px 0; text-align: center;">ℹ️ About (Multi-Coin Overlay)</h3>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    # SIDEBAR CONTENT
     st.sidebar.info(
         """
         Compare the relative performance of multiple coins over time.  
@@ -525,6 +837,7 @@ with tab4:
         - Useful to see relative outperformance  
         """
     )
+
 
     scroll_js = """
     <script>
